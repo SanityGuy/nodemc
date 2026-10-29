@@ -1,6 +1,7 @@
 package me.serenity.nodeMC;
 
 import me.serenity.nodeMC.listeners.AntiCommandView;
+import me.serenity.nodeMC.listeners.EntitySpawn;
 import me.serenity.nodeMC.utils.C;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -13,6 +14,7 @@ public final class NodeMC extends JavaPlugin {
     @Override
     public void onEnable() {
         registerEvent(new AntiCommandView());
+        registerEvent(new EntitySpawn());
 
         C.info("Plugin has been enabled!");
     }

@@ -2,6 +2,7 @@ package me.serenity.nodeMC.listeners;
 
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,7 +26,17 @@ public class AntiCommandView implements Listener {
 
         if (BLOCKED.contains(command.toLowerCase())) {
             e.setCancelled(true);
+
+            for (Player staff : Bukkit.getOnlinePlayers()){
+                if (!staff.hasPermission("nodemc.staff")) return;
+
+                staff.sendMessage(MM.deserialize(
+                        "<cyan><bold>LOG</bold></cyan> <reset>»</reset> " +
+                                "<cyan>User <reset>"+p.displayName()+"</reset> has executed the command<reset>: "+message));
+            }
+
             p.sendMessage(MM.deserialize("<red>Command not found. View <bold>/help</bold> for help!</red>"));
         }
     }
+
 }
