@@ -1,0 +1,10 @@
+name: NodeMC
+description: $description
+version: '${version}'
+
+main: me.serenity.nodeMC.NodeMC
+api-version: '26.3'
+load: POSTWORLD
+
+authors: [ SouyanDev ]
+website: www.souyande.xyz
