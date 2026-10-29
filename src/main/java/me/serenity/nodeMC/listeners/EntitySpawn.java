@@ -37,6 +37,5 @@ public class EntitySpawn implements Listener {
                         "<red>❤️</red>"));
 
         entity.setCustomNameVisible(true);
-        entity.setSilent(true);
     }
 }
