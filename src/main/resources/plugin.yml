@@ -8,3 +8,11 @@ load: POSTWORLD
 
 authors: [ SouyanDev ]
 website: www.souyande.xyz
+depend:
+  - LuckPerms
+
+commands:
+  heywhatsmyrank:
+    description: Displays your current rank information.
+    aliases:
+      - rank
