@@ -26,18 +26,16 @@ public final class TestingCommands implements CommandExecutor {
 
         switch (cmd.getName().toLowerCase()) {
             case "heywhatsmyrank" -> {
-                String rank = pm.getRank(p);
                 Group group = pm.getGroup(p);
+                String rank = group != null? group.getDisplayName() : "None";
+                String groupName = group != null ? group.getName() : "None";
                 String prefix = pm.getPrefix(p);
 
-                String groupName = group != null ? group.getName() : "none";
-                String formattedPrefix = prefix != null ? prefix : "none";
-
                 p.sendMessage(mm.deserialize(
-                        "<cyan>Hello <white>" + p.name() + "</white>!" +
-                                "\nYour current rank right now is: <white>" + rank + "</white>" +
-                                "\n<cyan>And your group is: <white>" + groupName + "</white>" +
-                                "\nAnd your prefix is: <reset>" + formattedPrefix + "</reset>"
+                        "\n<gray>Hello <white>" + p.getName() + "</white>!</gray>" +
+                                "\n<gray>Your current rank right now is: <white>" + rank + "</white></gray>" +
+                                "\n<gray>And your group is: <white>" + groupName + "</white></gray>" +
+                                "\n<gray>And your prefix is:</gray> <reset>" + prefix + "</reset>\n"
                 ));
             }
         }

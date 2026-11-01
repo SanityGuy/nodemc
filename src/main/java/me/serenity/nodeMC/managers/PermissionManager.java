@@ -49,7 +49,6 @@ public final class PermissionManager {
     public boolean isAdmin(UUID player) {
         return isInGroup(player, "admin");
     }
-
     public void addPermission(User user, String permission) {
         user.data().add(Node.builder(permission).build());
         luckPerms.getUserManager().saveUser(user);
@@ -87,6 +86,7 @@ public final class PermissionManager {
     public String getPrefix(Player player) {
         User user = luckPerms.getUserManager().getUser(player.getUniqueId());
         if (user == null) return "";
-        return user.getCachedData().getMetaData().getPrefix();
+        String prefix = user.getCachedData().getMetaData().getPrefix();
+        return prefix != null? prefix : "";
     }
 }
