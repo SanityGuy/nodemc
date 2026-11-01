@@ -31,6 +31,17 @@ public class JoinLeave implements Listener {
             msg = mm.deserialize("<green>" + p.getName() + "</green> <gray>has joined the server.</gray>");
         }
 
+        Component header = mm.deserialize(
+                "<aqua><bold>NodeMC Survival Server</bold></aqua>" +
+                        "\n<gray>You are currently a <green>" + pm.getGroup(p).getDisplayName() + "</green> in the server!</gray>"
+        );
+
+        Component footer = mm.deserialize(
+                "<gray>We hope you enjoy our server. <yellow>Suggestions & Discussions</yellow> are open in our</gray> <blue>Discord Server</blue>" +
+                        "\n<gray><blue>discord.gg/EZ4XBunzYg</blue> | <yellow>www.nodemc.xyz</yellow> | <aqua>t.me/nodemcxyz</aqua>"
+        );
+
+        p.sendPlayerListHeaderAndFooter(header, footer);
         Bukkit.broadcast(msg);
     }
 
