@@ -4,9 +4,13 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
+import net.luckperms.api.node.NodeType;
+import net.luckperms.api.node.types.InheritanceNode;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -77,6 +81,23 @@ public final class PermissionManager {
 
     public boolean hasPermission(Player player, String permission) {
         return player.hasPermission(permission);
+    }
+
+    public boolean isHigherThanOrEqual(Player player, String group) {
+        Group rank = luckPerms.getGroupManager().getGroup(group);
+        if (rank == null) return false;
+        int targetWeight = rank.getWeight().orElse(0);
+
+        User user = luckPerms.getPlayerAdapter(Player.class).getUser(player);
+        int playerWeight = user.getNodes(NodeType.INHERITANCE).stream()
+                .map(InheritanceNode::getGroupName)
+                .map(g -> luckPerms.getGroupManager().getGroup(g))
+                .filter(Objects::nonNull)
+                .mapToInt(g -> g.getWeight().orElse(0))
+                .max()
+                .orElse(0);
+
+        return playerWeight >= targetWeight;
     }
 
     public CompletableFuture<User> loadUser(UUID player) {

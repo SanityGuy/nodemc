@@ -4,6 +4,7 @@ import me.serenity.nodeMC.commands.TestingCommands;
 import me.serenity.nodeMC.listeners.AntiCommandView;
 import me.serenity.nodeMC.listeners.ChatFormat;
 import me.serenity.nodeMC.listeners.EntitySpawn;
+import me.serenity.nodeMC.listeners.JoinLeave;
 import me.serenity.nodeMC.managers.PermissionManager;
 import me.serenity.nodeMC.utils.C;
 import net.luckperms.api.LuckPerms;
@@ -39,6 +40,7 @@ public final class NodeMC extends JavaPlugin {
         registerEvent(new AntiCommandView());
         registerEvent(new EntitySpawn());
         registerEvent(new ChatFormat());
+        registerEvent(new JoinLeave());
 
         C.info("Plugin has been enabled!");
     }
