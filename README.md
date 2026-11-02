@@ -7,6 +7,11 @@ This plugin is made for testing and fun aswell as to test several plugins
 in the custom local server of <b>NodeMC</b> currently locally hosted.
 </br>
 
+### Server Description
+NodeMC is a minecraft survival server that includes Economy, Clans, Skills, Jobs, and etc.
+This server is a mixture of mmoRPG & Survival in which we have enhanced the experience and gameplay
+so that it still feels as if you're playing in a regular server but with great custom experience!
+
 ### Stack & Libraries
 <ul>
 <li>Java 27</li>
