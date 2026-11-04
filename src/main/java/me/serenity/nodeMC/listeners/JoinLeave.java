@@ -1,6 +1,8 @@
+
 package me.serenity.nodeMC.listeners;
 
 import me.serenity.nodeMC.NodeMC;
+import me.serenity.nodeMC.database.DatabaseManager;
 import me.serenity.nodeMC.managers.PermissionManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -11,18 +13,36 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.sql.SQLException;
+
 public class JoinLeave implements Listener {
 
     private static final MiniMessage mm = MiniMessage.miniMessage();
     private final PermissionManager pm;
-    public JoinLeave() { this.pm = NodeMC.get().getPermissionManager(); }
+    private final DatabaseManager dm;
+
+    public JoinLeave() {
+        this.pm = NodeMC.get().getPermissionManager();
+        this.dm = NodeMC.get().getDatabaseManager();
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         e.joinMessage(null);
 
+        Bukkit.getScheduler().runTaskAsynchronously(NodeMC.get(), () -> {
+            try {
+                dm.recordJoin(p.getUniqueId(), p.getName());
+            } catch (SQLException ex) {
+                NodeMC.get().getLogger().severe(
+                        "Failed to record player join: " + ex.getMessage()
+                );
+            }
+        });
+
         Component msg;
+
         if (pm.isHigherThanOrEqual(p, "staff")) {
             msg = mm.deserialize("<aqua>⚡ <bold>" + p.getName() + "</bold> <gray>(Staff) has arrived!</gray>");
         } else if (pm.isHigherThanOrEqual(p, "vip")) {
@@ -51,6 +71,7 @@ public class JoinLeave implements Listener {
         e.quitMessage(null);
 
         Component msg;
+
         if (pm.isHigherThanOrEqual(p, "staff")) {
             msg = mm.deserialize("<aqua>⚡ <bold>" + p.getName() + "</bold> <gray>(Staff) has departed.</gray>");
         } else if (pm.isHigherThanOrEqual(p, "vip")) {

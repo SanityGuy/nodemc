@@ -40,6 +40,8 @@ public final class NodeMC extends JavaPlugin {
         databaseManager.connect();
 
         registerCMD("heywhatsmyrank", new TestingCommands());
+        registerCMD("stats", new TestingCommands());
+
 
         registerEvent(new AntiCommandView());
         registerEvent(new EntitySpawn());

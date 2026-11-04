@@ -4,10 +4,8 @@ import me.serenity.nodeMC.NodeMC;
 import me.serenity.nodeMC.utils.C;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.UUID;
 
 public class DatabaseManager {
     private final NodeMC plugin;
@@ -51,16 +49,80 @@ public class DatabaseManager {
         }
     }
 
-    public Connection getConnection(){ return connection; }
-    public void disconnect() {
+
+    public synchronized void recordJoin(UUID uuid, String username) throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            throw new SQLException("Database connection is unavailable.");
+        }
+
+        String sql = """
+        INSERT INTO players (uuid, username, first_join, last_join, join_count)
+        VALUES (?, ?, ?, ?, 1)
+        ON CONFLICT(uuid) DO UPDATE SET
+            username = excluded.username,
+            last_join = excluded.last_join,
+            join_count = players.join_count + 1
+        """;
+
+        long now = System.currentTimeMillis();
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+            statement.setString(2, username);
+            statement.setLong(3, now);
+            statement.setLong(4, now);
+
+            statement.executeUpdate();
+        }
+    }
+
+    public synchronized PlayerStats getPlayerStats(UUID uuid) throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            throw new SQLException("Database connection is unavailable.");
+        }
+
+        String sql = "SELECT * FROM players WHERE uuid = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, uuid.toString());
+
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return new PlayerStats(
+                            result.getString("uuid"),
+                            result.getString("username"),
+                            result.getLong("first_join"),
+                            result.getLong("last_join"),
+                            result.getInt("join_count")
+                    );
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+    public Connection getConnection() { return connection; }
+
+    public synchronized void disconnect() {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
-                C.warn("Disconnected from SQLite Database");
+                plugin.getLogger().info("Disconnected from SQLite database.");
             }
         } catch (SQLException e) {
-            C.warn("Failed to close database connection: " + e.getMessage());
+            plugin.getLogger().severe("Database shutdown failed: " + e.getMessage());
         }
     }
+
+    public record PlayerStats(
+            String uuid,
+            String username,
+            long firstJoin,
+            long lastJoin,
+            int joinCount
+    ) {}
+
 
 }
