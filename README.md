@@ -17,12 +17,19 @@ so that it still feels as if you're playing in a regular server but with great c
 <li>Java 27</li>
 <li>Docker</li>
 <li>PaperMC 26.3</li>
+<li>SQLite</li>
 </ul>
 
 ### Connected API
 <ul>
 <li><a href="https://luckperms.net" target="_blank" aria-label="hidden" style="color: green;">LuckPerms</a></li>
 <li><a href="https://dev.bukkit.org/projects/worldguard" target="_blank" aria-label="hidden" style="color: #5b73ff">WorldGuard</a> </li>
+</ul>
+
+### Databases
+<ul>
+<li>SQLite</li>
+<li>PersistentDataContainer</li>
 </ul>
 
 ### Contributions

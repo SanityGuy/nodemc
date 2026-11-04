@@ -1,6 +1,7 @@
 package me.serenity.nodeMC;
 
 import me.serenity.nodeMC.commands.TestingCommands;
+import me.serenity.nodeMC.database.DatabaseManager;
 import me.serenity.nodeMC.listeners.AntiCommandView;
 import me.serenity.nodeMC.listeners.ChatFormat;
 import me.serenity.nodeMC.listeners.EntitySpawn;
@@ -20,6 +21,7 @@ public final class NodeMC extends JavaPlugin {
 
     private LuckPerms luckPerms;
     private PermissionManager permissionManager;
+    private DatabaseManager databaseManager;
 
     @Override
     public void onEnable() {
@@ -34,6 +36,8 @@ public final class NodeMC extends JavaPlugin {
 
         luckPerms = provider.getProvider();
         permissionManager = new PermissionManager(luckPerms);
+        databaseManager = new DatabaseManager(this);
+        databaseManager.connect();
 
         registerCMD("heywhatsmyrank", new TestingCommands());
 
@@ -47,27 +51,23 @@ public final class NodeMC extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (databaseManager != null) {
+            databaseManager.disconnect();
+        }
         C.info("Plugin has been disabled!");
     }
 
     public static NodeMC get() {
         return getPlugin(NodeMC.class);
     }
-
     public LuckPerms getLuckPerms() {
         return luckPerms;
     }
-
     public PermissionManager getPermissionManager() {
         return permissionManager;
     }
+    public DatabaseManager getDatabaseManager() { return databaseManager; }
+    public void registerEvent(Listener listener) { Bukkit.getPluginManager().registerEvents(listener, this); }
+    public void registerCMD(String command, CommandExecutor executor) { Objects.requireNonNull(getCommand(command), "Command not defined: " + command).setExecutor(executor); }
 
-    public void registerCMD(String command, CommandExecutor executor) {
-        Objects.requireNonNull(getCommand(command), "Command not defined: " + command)
-                .setExecutor(executor);
-    }
-
-    public void registerEvent(Listener listener) {
-        Bukkit.getPluginManager().registerEvents(listener, this);
-    }
 }
