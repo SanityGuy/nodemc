@@ -47,5 +47,13 @@ For anyone wondering if I would release this plugin, answer is no. but this plug
 remain open-sourced for transparency and reassurance that no private data is collected or used unlawfully, 
 this project open for submissions for the upcoming <b>NodeMC Demo</b> server.
 
+### TODO (Last Updated 11/11/2026)
+- Enhance player data
+- Use vault for economy
+- Custom shops
+- NameTags
+- Custom mobs & items
+- Spawn with custom warps/tpa
+
 ### License
 This project is currently licensed under the [MIT License](LICENSE)
