@@ -36,15 +36,26 @@ public final class NodeMC extends JavaPlugin {
         databaseManager = new DatabaseManager(this);
         databaseManager.connect();
 
-        registerCMD("heywhatsmyrank", new TestingCommands());
-        registerCMD("stats", new TestingCommands());
+        try {
+            registerCMD("heywhatsmyrank", new TestingCommands());
+            registerCMD("stats", new TestingCommands());
+            C.info("All commands has been registered.");
+        } catch(Exception e) {
+            C.warn("Problem occured while registering commands.\n" +
+                    "Error: " +e.getMessage());
+        }
 
-
-        registerEvent(new AntiCommandView());
-        registerEvent(new EntitySpawn());
-        registerEvent(new ChatFormat());
-        registerEvent(new JoinLeave());
-        registerEvent(new PlayerDeath());
+        try {
+            registerEvent(new AntiCommandView());
+            registerEvent(new EntitySpawn());
+            registerEvent(new ChatFormat());
+            registerEvent(new JoinLeave());
+            registerEvent(new PlayerDeath());
+            C.info("All listeners/events has been registered.");
+        } catch(Exception e) {
+            C.warn("Problem occured while registering listeners/events.\n" +
+                    "Error: " +e.getMessage());
+        }
 
         C.info("Plugin has been enabled!");
     }
